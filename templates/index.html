@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hybrid Cryptography - Secure Communication</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Roboto:wght@300;400&display=swap" rel="stylesheet" />
+<style>
+  /* Reset */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+  }
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #001f2d, #002f47);
+    color: #d0f0fd;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Top Auth Bar */
+  .top-auth-bar {
+    background: rgba(0, 50, 80, 0.9);
+    padding: 0.5rem 2rem;
+    text-align: right;
+    box-shadow: 0 2px 10px rgba(0, 255, 168, 0.2);
+  }
+  .auth-buttons-top a {
+    margin-left: 1.2rem;
+    padding: 0.4rem 1.2rem;
+    border: 2px solid #00ffa8;
+    border-radius: 20px;
+    color: #00ffa8;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  .auth-buttons-top a:hover {
+    background-color: #00ffa8;
+    color: #002f47;
+  }
+
+  /* Navbar */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 3rem;
+    background: rgba(0, 50, 80, 0.85);
+    box-shadow: 0 0 15px #00ffa8;
+  }
+  .navbar .logo a {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    color: #00ffa8;
+    text-decoration: none;
+    letter-spacing: 1.5px;
+  }
+  .navbar .nav-links a {
+    color: #a0eaff;
+    text-decoration: none;
+    margin-left: 2rem;
+    font-weight: 400;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+  }
+  .navbar .nav-links a:hover {
+    color: #00ffa8;
+  }
+
+  /* Hero Section */
+  .hero {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 6rem 2rem;
+    background: url('https://cdn.pixabay.com/photo/2017/01/10/19/05/digital-1965448_1280.jpg') no-repeat center/cover;
+    position: relative;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+  }
+  .hero-content {
+    position: relative;
+    max-width: 720px;
+    color: #00ffa8;
+  }
+  .hero h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 0 15px #00ffa8;
+  }
+  .hero p {
+    font-size: 1.25rem;
+    font-weight: 300;
+    margin-bottom: 2rem;
+    color: #a0eaff;
+    text-shadow: 0 0 6px #00ffa8;
+  }
+  .btn-primary {
+    background: linear-gradient(90deg, #00ffa8, #007f5f);
+    padding: 1rem 3rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #002f47;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 20px #00ffa8;
+    transition: background 0.3s ease;
+  }
+  .btn-primary:hover {
+    background: linear-gradient(90deg, #007f5f, #00ffa8);
+  }
+
+  /* Features */
+  .features {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 4rem 2rem;
+    background: rgba(0, 50, 80, 0.8);
+  }
+  .feature-card {
+    background: rgba(0, 255, 168, 0.1);
+    border: 2px solid #00ffa8;
+    border-radius: 20px;
+    padding: 2rem;
+    width: 280px;
+    text-align: center;
+    color: #a0eaff;
+    box-shadow: 0 0 10px #00ffa8;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .feature-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 0 25px #00ffa8;
+  }
+  .feature-card h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: #00ffa8;
+  }
+  .feature-card p {
+    font-weight: 300;
+  }
+
+  /* About */
+  .about-section {
+    background: rgba(0, 50, 80, 0.9);
+    padding: 4rem 2rem;
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+    color: #a0eaff;
+  }
+  .about-section h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+    color: #00ffa8;
+  }
+  .about-section p {
+    font-weight: 300;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Contact */
+  .contact-section {
+    background: rgba(0, 40, 65, 0.9);
+    padding: 4rem 2rem;
+    text-align: center;
+    color: #a0eaff;
+  }
+  .contact-section h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #00ffa8;
+  }
+  .contact-info {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+  .contact-info p {
+    font-size: 1.1rem;
+    font-weight: 300;
+    max-width: 300px;
+  }
+  form {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  input, textarea {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+  }
+  input:focus, textarea:focus {
+    outline: 2px solid #00ffa8;
+  }
+  button {
+    background: #00ffa8;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #002f47;
+    box-shadow: 0 0 20px #00ffa8;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #007f5f;
+  }
+
+  /* Footer */
+  .footer {
+    background: rgba(0, 50, 80, 0.95);
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #a0eaff;
+    font-weight: 300;
+    font-size: 0.9rem;
+  }
+  .footer a {
+    color: #00ffa8;
+    text-decoration: none;
+    margin: 0 0.7rem;
+  }
+  .footer a:hover {
+    text-decoration: underline;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .features {
+      flex-direction: column;
+      align-items: center;
+    }
+    .feature-card {
+      width: 90%;
+      max-width: 320px;
+    }
+    .navbar {
+      flex-wrap: wrap;
+    }
+    .navbar .nav-links {
+      margin-top: 1rem;
+      width: 100%;
+      text-align: center;
+    }
+    .navbar .nav-links a {
+      margin: 0 10px;
+    }
+    .top-auth-bar {
+      text-align: center;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="top-auth-bar">
+    <div class="auth-buttons-top">
+      <a href="{{ url_for('login') }}">Login</a>
+      <a href="{{ url_for('register') }}">Register</a>
+    </div>
+  </div>
+  <nav class="navbar">
+    <div class="logo"><a href="{{ url_for('index') }}">HybridCrypt</a></div>
+    <div class="nav-links">
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="#about">About</a>
+      <a href="#features">Features</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Hybrid Cryptography for Secure Communication</h1>
+      <p>Fusing Chaos-Based and ElGamal algorithms for unparalleled security and privacy.</p>
+      <button class="btn-primary" onclick="window.location.href='{{ url_for('login') }}'">Get Started</button>
+    </div>
+  </section>
+  <section class="features" id="features">
+    <div class="feature-card">
+      <h3>Chaos-Based Encryption</h3>
+      <p>Utilizing chaotic systems to generate unpredictable keys.</p>
+    </div>
+    <div class="feature-card">
+      <h3>ElGamal Security</h3>
+      <p>Proven asymmetric cryptography ensuring secure key exchange.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Hybrid Strength</h3>
+      <p>Combining best of both worlds for robust, efficient encryption.</p>
+    </div>
+  </section>
+  <section class="about-section" id="about">
+    <h2>About HybridCrypt</h2>
+    <p>HybridCrypt merges chaos theory with classic ElGamal cryptosystem to create a powerful encryption scheme designed for modern secure communication needs. This fusion guarantees confidentiality, resistance to attacks, and efficiency.</p>
+    <p>Our platform is crafted for researchers, developers, and enterprises focused on cutting-edge cryptographic solutions.</p>
+  </section>
+  <section class="contact-section" id="contact">
+    <h2>Contact Us</h2>
+    <div class="contact-info">
+      <p><strong>Email:</strong> your-email@example.com</p>
+      <p><strong>Phone:</strong> +91 12345 67890</p>
+      <p><strong>Address:</strong> 456 Crypto Blvd, Secure City</p>
+    </div>
+    <form action="/contact" method="POST">
+      <input type="text" name="name" placeholder="Your Name" required />
+      <input type="email" name="email" placeholder="Your Email" required />
+      <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+      <button type="submit">Send Message</button>
+    </form>
+  </section>
+  <footer class="footer">
+    <p>© 2025 HybridCrypt. All rights reserved.</p>
+    <p>
+      <a href="#">Privacy Policy</a> | 
+      <a href="#">Terms of Service</a> | 
+      <a href="#contact">Contact</a>
+    </p>
+  </footer>
+</body>
+</html>
