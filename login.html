@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - HybridCrypt</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Roboto&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      background: linear-gradient(135deg, #001f2d, #002f47);
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #d0f0fd;
+      overflow: hidden;
+    }
+
+    .login-box {
+      background: rgba(0, 30, 50, 0.95);
+      padding: 3rem 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 0 25px #00ffa8;
+      width: 90%;
+      max-width: 420px;
+      text-align: center;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        transform: translateY(30px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2rem;
+      margin-bottom: 1.2rem;
+      color: #00ffa8;
+      text-shadow: 0 0 12px #00ffa8;
+    }
+
+    .mode-toggle {
+      margin-bottom: 1.8rem;
+    }
+
+    .mode-toggle label {
+      margin: 0 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .mode-toggle input[type="radio"] {
+      margin-right: 6px;
+    }
+
+    form input[type="text"],
+    form input[type="password"] {
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      background: rgba(0, 255, 168, 0.05);
+      color: #00ffa8;
+      font-size: 1rem;
+      transition: box-shadow 0.3s ease;
+    }
+
+    form input:focus {
+      outline: none;
+      box-shadow: 0 0 10px #00ffa8;
+    }
+
+    form input::placeholder {
+      color: #a0eaff;
+    }
+
+    form input[type="submit"] {
+      width: 100%;
+      background: linear-gradient(90deg, #00ffa8, #007f5f);
+      border: none;
+      padding: 1rem;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #002f47;
+      cursor: pointer;
+      box-shadow: 0 0 18px #00ffa8;
+      transition: transform 0.2s ease, background 0.3s ease;
+    }
+
+    form input[type="submit"]:hover {
+      background: linear-gradient(90deg, #007f5f, #00ffa8);
+      transform: scale(1.05);
+    }
+
+    a {
+      display: block;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: #a0eaff;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    a:hover {
+      text-decoration: underline;
+      color: #00ffa8;
+    }
+
+    .footer-note {
+      margin-top: 1.8rem;
+      font-size: 0.8rem;
+      color: #66c5ff;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 480px) {
+      .login-box {
+        padding: 2rem 1.5rem;
+      }
+
+      .mode-toggle label {
+        display: block;
+        margin: 0.5rem 0;
+      }
+    }
+
+    .flash {
+      padding: 0.8rem 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .flash.success {
+      background-color: #003f2f;
+      color: #00ffa8;
+      border: 1px solid #00ffa8;
+    }
+
+    .flash.danger {
+      background-color: #4b1c1c;
+      color: #ff6b6b;
+      border: 1px solid #ff6b6b;
+    }
+
+    .flash.warning {
+      background-color: #4f3b1b;
+      color: #ffcc00;
+      border: 1px solid #ffcc00;
+    }
+
+    .flash.info {
+      background-color: #1c3f50;
+      color: #66c5ff;
+      border: 1px solid #66c5ff;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="login-box">
+    <h2>Login to HybridCrypt</h2>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- Role Selection -->
+    <div class="mode-toggle">
+      <label><input type="radio" name="mode" value="User" checked onclick="setMode('User')"> User</label>
+      <label><input type="radio" name="mode" value="Admin" onclick="setMode('Admin')"> Admin</label>
+    </div>
+
+    <!-- Login Form -->
+    <form action="{{ url_for('login') }}" method="POST">
+      <input type="hidden" name="role" id="role" value="User" />
+      <input type="text" name="username" placeholder="Enter your username" required />
+      <input type="password" name="password" placeholder="Enter your password" required />
+      <input type="submit" value="Login" />
+    </form>
+
+    <!-- Links -->
+    <a href="{{ url_for('register') }}">Don't have an account? Register</a>
+    <a href="{{ url_for('index') }}">← Back to Home</a>
+
+    <!-- Footer Note -->
+    <p class="footer-note">© 2025 HybridCrypt. Secure Communication.</p>
+  </div>
+
+  <!-- Script to update role -->
+  <script>
+    function setMode(role) {
+      document.getElementById('role').value = role;
+    }
+  </script>
+
+</body>
+</html>
