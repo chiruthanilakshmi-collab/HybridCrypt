@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Visuals - HybridCrypt</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background-color: #001f2d;
+      color: #d0f0fd;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 2rem;
+      margin: 0;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-weight: 700;
+      font-size: 2rem;
+    }
+    .charts {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .chart-box {
+      background: #00364d;
+      border-radius: 15px;
+      padding: 1rem 2rem;
+      flex: 1 1 300px;
+      box-shadow: 0 0 15px #00ffa8;
+      color: #d0f0fd;
+    }
+    .chart-box h4 {
+      text-align: center;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    canvas {
+      background: #fff;
+      border-radius: 15px;
+      padding: 1rem;
+      max-width: 100%;
+      height: 300px !important;
+    }
+  </style>
+</head>
+<body>
+  <h2>📊 HybridCrypt Encryption Visuals</h2>
+  <div class="charts">
+    <div class="chart-box">
+      <h4>🔐 Avg File Size (KB)</h4>
+      <canvas id="fileSizeChart" aria-label="Average file size before and after encryption" role="img"></canvas>
+    </div>
+    <div class="chart-box">
+      <h4>👥 Users by Role</h4>
+      <canvas id="userChart" aria-label="Number of users by role" role="img"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const avgBefore = {{ stats.avg_file_size_before | default(0) }};
+    const avgAfter = {{ stats.avg_file_size_after | default(0) }};
+    const adminCount = {{ stats.users.Admin | default(0) }};
+    const userCount = {{ stats.users.User | default(0) }};
+
+    const fileSizeChart = new Chart(document.getElementById("fileSizeChart"), {
+      type: "bar",
+      data: {
+        labels: ["Before", "After"],
+        datasets: [{
+          label: "File Size (KB)",
+          data: [avgBefore, avgAfter],
+          backgroundColor: ["#00bfff", "#00ff88"]
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Size (KB)'
+            }
+          }
+        }
+      }
+    });
+
+    const userChart = new Chart(document.getElementById("userChart"), {
+      type: "pie",
+      data: {
+        labels: ["Admin", "User"],
+        datasets: [{
+          label: "User Count",
+          data: [adminCount, userCount],
+          backgroundColor: ["#ff6384", "#36a2eb"]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom',
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
